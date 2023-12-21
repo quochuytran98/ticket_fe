@@ -1,27 +1,13 @@
-# Sử dụng image cơ sở Ubuntu để build ứng dụng React
 FROM node:20
-
-# Thiết lập thư mục làm việc
-WORKDIR /app
-
-# Sao chép các tệp package.json và package-lock.json vào thư mục làm việc
-COPY package*.json ./
-
-# Cài đặt dependencies
-RUN npm install
-
-# Sao chép mã nguồn ứng dụng vào thư mục làm việc
-COPY . .
-
-# Build ứng dụng React
 RUN npm run build
-
-
-# Sao chép các tệp build từ image build trước (stage build)
-COPY --from=build /app/build /var/www/html
-
-# Cổng mặc định của Nginx
-EXPOSE 3000
-
-# Lệnh để khởi động Nginx khi container được chạy
-CMD ["nginx", "-g", "daemon off;"]
+# 2. For Nginx setup
+FROM nginx:alpine
+# Copy config nginx
+COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf ./*
+# Copy static assets from builder stage
+COPY --from=build /app/build .
+# Containers run nginx with global directives and daemon off
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -1,13 +1,24 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Colors */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap');
+
+/* Customize fonts */
+@layer utilities {
+  .font-proxima {
+    font-family: 'Proxima Nova', sans-serif;
+  }
+}
+/* Thêm màu và hiệu ứng hover cho nút "Create Event" */
+.create-event-btn {
+  background-color: #1890ff; /* Màu xanh dương */
+  border-color: #1890ff; /* Màu viền */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.create-event-btn:hover {
+  opacity: 0.8; /* Hiệu ứng hover */
 }
+

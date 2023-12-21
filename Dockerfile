@@ -13,7 +13,7 @@ WORKDIR /app
 COPY ${workdir}/ /app/
 
 # Cài đặt các thư viện node liên quan.
-RUN npm install
+RUN npm i --f
 
 # Chạy lệnh build.
 RUN npm run build

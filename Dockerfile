@@ -1,5 +1,5 @@
 # Sử dụng image cơ sở Ubuntu để build ứng dụng React
-FROM ubuntu:20.04 as build
+FROM node:20
 
 # Thiết lập thư mục làm việc
 WORKDIR /app

@@ -19,7 +19,7 @@ RUN npm i --f
 RUN npm run build
 
 # Sử dụng nginx
-FROM nginx:1.12
+FROM nginx
 # Copy folder đã được build vào folder chạy của nginx.
 COPY --from=node /app/build/ /var/www/dist/
 

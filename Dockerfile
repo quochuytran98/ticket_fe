@@ -1,36 +1,29 @@
-# Build docker image.
-# Sử dung node
-FROM node
+# Stage 1: Build
+FROM node:20 as build
 
-# Khai báo tham số
-ARG workdir=.
-LABEL description="deploy react app"
-
-# Khái báo workdir trong node.
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy project vào trong workdir của node.
-COPY ${workdir}/ /app/
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Cài đặt các thư viện node liên quan.
-RUN npm i --f
+# Install dependencies
+RUN npm install
 
-# Chạy lệnh build.
+# Copy the entire application code to the container
+COPY . .
+
+# Build the React app for production
 RUN npm run build
 
-# Sử dụng nginx
-FROM nginx
-# Copy folder đã được build vào folder chạy của nginx.
-COPY --from=node /app/build/ /var/www/dist/
+# Stage 2: Deploy
+FROM nginx:alpine
 
-# Copy file cấu hình chạy cho nginx (file nginx.conf sẽ tạo ở bước tiếp theo)
-COPY --from=node /app/nginx.conf /etc/nginx/nginx.conf
+# Copy the built React app from the build stage to Nginx's web server directory
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Cài đặt curl cho câu lệnh check HEALTH
-RUN apt-get update && apt-get install -y curl
+# Expose port 80 for the Nginx server
+EXPOSE 80
 
-# Kiểm tra trạng thái của container sau khi chạy
-HEALTHCHECK --interval=1m --timeout=3s \
-  CMD curl -f http://localhost || exit 1
-
+# Start Nginx when the container runs
 CMD ["nginx", "-g", "daemon off;"]

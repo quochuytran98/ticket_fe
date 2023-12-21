@@ -30,6 +30,6 @@ jobs:
           script: |
             docker stop quochuy98/ticket_fe || true
             docker rm quochuy98/ticket_fe || true
-            docker run -p 3000:80 -d --name ticket_fe ticket_fe
+            docker run -p 3000:80 -d --name ticket_fe quochuy98/ticket_fe
 
 
